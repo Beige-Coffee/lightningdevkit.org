@@ -3,7 +3,7 @@
 ## Overview
 LDK provides a ```FeeEstimator``` trait which, once implemented, assists in variety of on-chain and off-chain functions in the LDK stack. It's important to note that the ```FeeEstimator``` only describes the architectural requirements that must be satisfied to successfully incorporate LDK into your project. It does not, itself, provide the logic or implementation to calculate a feerate. 
 
-In LDK, feerates are separated into seven categories. Each category is known as a ```ConfirmationTarget```. We'll provide an in-depth review these shortly, but, for now, it's sufficient to know that these categories represent varios scenarios in which we need feerate information. For example, one ```ConfirmationTarget``` is ```MinAllowedAnchorChannelRemoteFee```, which describes the lowest feerate we will allow our channel counterparty to have in an anchor channel.
+In LDK, feerates are separated into seven categories. Each category is known as a ```ConfirmationTarget```. We'll provide an in-depth review these shortly, but, for now, it's sufficient to know that these categories represent various scenarios in which we need feerate information. For example, one ```ConfirmationTarget``` is ```MinAllowedAnchorChannelRemoteFee```, which describes the lowest feerate we will allow our channel counterparty to have in an anchor channel.
 
 Feerates and their functionality within LDK can be conceptually separated into on-chain (Bitcoin) and off-chain (Lightning Network) tasks.
 
