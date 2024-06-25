@@ -3,12 +3,12 @@
 ## Overview
 LDK provides a ```FeeEstimator``` trait which, once implemented, assists in variety of on-chain and off-chain functions in the LDK stack. It's important to note that the ```FeeEstimator``` only describes the architectural requirements that must be satisfied to successfully incorporate LDK into your project. It does not, itself, provide the logic or implementation to calculate a feerate. 
 
-In LDK, feerates are separated into seven categories. Each category is known as a ```ConfirmationTarget```. We'll provide an in-depth review these shortly, but, for now, it's sufficient to know that these categories represent various scenarios in which we need feerate information. For example, one ```ConfirmationTarget``` is ```MinAllowedAnchorChannelRemoteFee```, which describes the lowest feerate we will allow our channel counterparty to have in an anchor channel.
+In LDK, feerates are separated into seven categories. Each category is known as a ```ConfirmationTarget```. We'll provide a brief review of these shortly, but, for now, it's sufficient to know that these categories represent various scenarios in which we need feerate information. For example, one ```ConfirmationTarget``` is ```MinAllowedAnchorChannelRemoteFee```, which describes the lowest feerate we will allow our channel counterparty to have in an anchor channel.
 
 Feerates and their functionality within LDK can be conceptually separated into on-chain (Bitcoin) and off-chain (Lightning Network) tasks.
 
 #### On-Chain
-Lightning's security model is dependent on the ability to confirm a claim transaction under a variety of circumstances, such as before a timelock expires. To ensure that LDK is able to confirm claim transactions in a timely manner or bump the fee on an existing transaction, LDK utilizes the ```FeeEstimator``` to fetch feerates for high priority transactions. For example, the ```OnChainSweep``` ```ConfirmationTarget``` specifies the feerate used when we have funds available on-chain that must be spent before a certain expiry time, beyond which our counterparty could potentially steal them.
+Lightning's security model is dependent on the ability to confirm a claim transaction under a variety of circumstances, such as before a timelock expires. To ensure that LDK is able to confirm claim transactions in a timely manner or bump the fee on an existing transaction, LDK utilizes the ```FeeEstimator``` to fetch feerates for high priority transactions. For example, the ```OnChainSweep``` ```ConfirmationTarget``` specifies the feerate used when we have funds available on-chain that must be spent before a certain expiry time, beyond which our counterparty could potentially steal them. Additionally, the ```OutputSpendingFee``` ```ConfirmationTarget``` is used by the ```OutputSweeper``` utility to ensure that, after channel closure, all funds are eventually swept to an onchain address controlled by the user.
 
 #### Off-Chain
 From an off-chain perspective, the ```FeeEstimator``` provides vital information that is used when opening, closing, and operating channels with peers on the Lightning Network. For example, when opening an inbound channel or updating an existing channel with a counterparty, LDK will compare the counterparty's proposed feerate with the minimum feerate that is allowed for that type of channel (ex: anchor or non-anchor channel). If the proposed fee is too low, LDK may return and error and suggest to close the channel. During these operations, LDK will reference the ```MinAllowedAnchorChannelRemoteFee``` ```ConfirmationTarget``` and the ```MinAllowedNonAnchorChannelRemoteFee``` ```ConfirmationTarget```. Therefore, it's recommended to ensure that the minimum allowable fees are not set too high, thus increasing the risk that a peer's proposed feerate is too low, potentially resulting in a force closure. See the **Best Practices** section in this documentation for more helpful tips when implementing LDK's ```FeeEstimator```.
@@ -56,15 +56,15 @@ A popular approach is to fetch feerate information from a third-party such as me
 
 | ConfirmationTarget| mempool.space Category | Number of Blocks |
 | :---------------- | :------: | :----: |
-| OnChainSweep        |   fastest_fee   | 6 |
+| OnChainSweep        |   hour_fee   | 6 |
 | MinAllowedAnchorChannelRemoteFee           |   minimum_fee   | 1008 |
-| MinAllowedNonAnchorChannelRemoteFee    |  minimum_fee   | 144 |
+| MinAllowedNonAnchorChannelRemoteFee    |  economy_fee   | 144 |
 | AnchorChannelFee |  minimum_fee   | 1008 |
-| NonAnchorChannelFee |  hour_fee   | 12 |
-| ChannelCloseMinimum |  minimum_fee   | 144 |
+| NonAnchorChannelFee |  economy_fee   | 12 |
+| ChannelCloseMinimum |  economy_fee   | 144 |
 | OutputSpendingFee |  economy_fee   | 12 |
 
-**NOTE**: Setting ```MinAllowedAnchorChannelRemoteFee``` or ```MinAllowedNonAnchorChannelRemoteFee``` **too high**, will increase the risk that a peer's proposed feerate is too low, potentially resulting in a force closure. On the flip side, setting ```AnchorChannelFee``` or ```NonAnchorChannelFee``` **too low**, will increase the risk that your node's proposed feerate is too low, potentially resulting in a force closure.
+**NOTE**: Setting ```MinAllowedAnchorChannelRemoteFee``` or ```MinAllowedNonAnchorChannelRemoteFee``` **too high**, will increase the risk that a peer's proposed feerate is, comparatively, too low, potentially resulting in a force closure. Similarly, setting ```AnchorChannelFee``` or ```NonAnchorChannelFee``` **too low**, will increase the risk that your node's proposed feerate is, comparatively, too low, potentially resulting in a force closure.
 
 
 ### General Architecture Approaches
@@ -85,7 +85,7 @@ Running your own Bitcoin node can relieve some of these concerns, but it may req
 A savvy reader may have noticed that the above architecture is not very performant. LDK may generate a substantial number of fee-estimation calls in some cases. So, if we have to call an API every time we want a fee estimate, we'll add a significant amount of additional load to our application, and we may substantially slow HTLC handling. To ensure your application remains performant, you should pre-calculate and cache the fee estimates so that they can simply be retrieved when needed. Additionally, it's recommended to refresh fee estimates every 5-10 minutes so that your application has access to fresh freerates.
 
 ### Feerate API Options
-While mempool.space serves as the primary example in this documentation, it is not the only third-party option for retrieving feerate estimates. A few more options are listed below. For completeness, mempool.space is included below.
+While mempool.space serves as the primary example in this documentation, it is not the only third-party option for retrieving feerate estimates. A few more options are listed below. For completeness, mempool.space is also included below.
 | Third Party| API Documentation | Response Type |
 | :---------------- | :------: | :----: |
 | Mempool.space  |   [API Docs](https://mempool.space/docs/api/rest#get-recommended-fees) | Categories (ex: fastestFee, halfHourFee, hourFee, economyFee, minimumFee)|
