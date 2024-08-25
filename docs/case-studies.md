@@ -189,8 +189,8 @@ lastUpdated: false
           <p>An experimentation with tor that adapts the ldk-sample node</p>
         </div>
         <div class="case-study-item">
-          <a href="https://github.com/RGB-Tools/rgb-lightning-sample" target="_blank"><img src="./assets/github.png" /></a>
-          <h3><a href="https://github.com/RGB-Tools/rgb-lightning-sample" target="_blank">rgb-lightning-sample</a></h3>
+          <a href="https://github.com/RGB-Tools/rgb-lightning-node" target="_blank"><img src="./assets/github.png" /></a>
+          <h3><a href="https://github.com/RGB-Tools/rgb-lightning-node" target="_blank">rgb-lightning-node</a></h3>
           <p>LN node based on ldk-sample supporting RGB assets</p>
         </div>
          <div class="case-study-item">
@@ -285,11 +285,6 @@ lastUpdated: false
     <p>Enterprise-grade, fast, secure payments on Lightning</p>
   </div>
   <div class="case-study-item">
-    <a href="https://www.lightspark.com/" target="_blank"> <img src="./assets/lightspark.png" /></a>
-    <h3><a href="https://www.lightspark.com/" target="_blank">Lightspark</a></h3>
-    <p>Enterprise-grade, fast, secure payments on Lightning</p>
-  </div>
-  <div class="case-study-item">
     <a href="https://github.com/lndk-org/lndk" target="_blank"><img src="./assets/lndk.png" /></a>
     <h3><a href="https://github.com/lndk-org/lndk" target="_blank">LNDK</a></h3>
     <p>A standalone daemon that aims to externally implement BOLT 12 functionality for LND</p>
@@ -305,8 +300,8 @@ lastUpdated: false
     <p>A web-first unstoppable bitcoin wallet for everyone</p>
   </div>
   <div class="case-study-item">
-    <a href="https://github.com/RGB-Tools/rgb-lightning-sample" target="_blank"><img src="./assets/github.png" /></a>
-    <h3><a href="https://github.com/RGB-Tools/rgb-lightning-sample" target="_blank">rgb-lightning-sample</a></h3>
+    <a href="https://github.com/RGB-Tools/rgb-lightning-node" target="_blank"><img src="./assets/github.png" /></a>
+    <h3><a href="https://github.com/RGB-Tools/rgb-lightning-node" target="_blank">rgb-lightning-node</a></h3>
     <p>LN node based on ldk-sample supporting RGB assets</p>
   </div>
   <div class="case-study-item">
